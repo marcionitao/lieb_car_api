@@ -10,9 +10,9 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # função do SQLAlchemy que cria uma classe base especial.
 Base = declarative_base()
-
+# cria a sessäo e usa
 def get_session():
-  session = SessionLocal() # cria a sessäo
+  session = SessionLocal() 
   try:
     yield session
   finally:
