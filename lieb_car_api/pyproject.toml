@@ -1,0 +1,7 @@
+[project]
+name = "Lieb Car API"
+version = "0.1.0"
+description = "A moderm API with FastAPI framework"
+authors = [
+  {name = Marcio Nitao, email = "marcionitao@gmail.com"}
+]
