@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 DATABASE_URL = 'sqlite:///cars.db'
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 # cria uma sessäo na DB
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
