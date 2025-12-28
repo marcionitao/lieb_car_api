@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
+
+from lieb_car_api.schemas import CarPublic, CarSchema
 
 router = APIRouter(
     prefix='/api/v1/cars',
@@ -6,12 +8,8 @@ router = APIRouter(
 )
 
 
-@router.get('/')
-def list_cars():
-    return {
-        'cars': [
-            {'id': 1, 'modelo': 'Marea 20v'},
-            {'id': 2, 'modelo': 'Opala'},
-            {'id': 3, 'modelo': 'Fusca'},
-        ]
-    }
+@router.post(
+    '/', response_model=CarPublic, status_code=status.HTTP_201_CREATED
+)
+def create_car(car: CarSchema):
+    return car
