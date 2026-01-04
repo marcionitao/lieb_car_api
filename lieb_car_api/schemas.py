@@ -24,6 +24,16 @@ class CarPublic(CarSchema):
     description: Optional[str] = None
 
 
-# achma que lista os dados
+# schema de envio de dados optcionais para alterar apenas 1 valor (@router.patch)
+class CarPartialUpdate(BaseModel):
+    brand: Optional[str] = None
+    model: Optional[str] = None
+    color: Optional[str] = None
+    factory_year: Optional[int] = None
+    model_year: Optional[int] = None
+    description: Optional[str] = None
+
+
+# schema que lista uma lista de dados
 class CarList(BaseModel):
     cars: list[CarPublic]

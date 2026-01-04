@@ -4,7 +4,12 @@ from sqlalchemy.orm import Session
 
 from lieb_car_api.database import get_session
 from lieb_car_api.models import Car
-from lieb_car_api.schemas import CarList, CarPublic, CarSchema
+from lieb_car_api.schemas import (
+    CarList,
+    CarPartialUpdate,
+    CarPublic,
+    CarSchema,
+)
 
 router = APIRouter(
     prefix='/api/v1/cars',
@@ -49,3 +54,50 @@ def get_car(car_id: int, session: Session = Depends(get_session)):  # noqa: B008
             status_code=status.HTTP_404_NOT_FOUND, detail='Car not found'
         )
     return car
+
+
+@router.put(
+    path='/{car_id}',
+    response_model=CarPublic,
+    status_code=status.HTTP_201_CREATED,
+)
+def update_car(
+    car_id: int,
+    car: CarSchema,
+    session: Session = Depends(get_session),  # noqa: B008
+):
+    db_car = session.get(Car, car_id)
+    if not db_car:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail='Car not found'
+        )
+    for field, value in car.model_dump().items():
+        setattr(db_car, field, value)
+    session.add(db_car)
+    session.commit()
+    session.refresh(db_car)
+    return db_car
+
+
+@router.patch(
+    path='/{car_id}',
+    response_model=CarPublic,
+    status_code=status.HTTP_201_CREATED,
+)
+def patch_car(
+    car_id: int,
+    car: CarPartialUpdate,
+    session: Session = Depends(get_session),  # noqa: B008
+):
+    db_car = session.get(Car, car_id)
+    if not db_car:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail='Car not found'
+        )
+    # Pegue apenas os campos que o usuário realmente enviou
+    update_data = car.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(db_car, field, value)
+    session.commit()
+    session.refresh(db_car)
+    return db_car
