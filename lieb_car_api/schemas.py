@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-# schema de envio de dados - request
+# schema de envio de dados sem ID - request
 class CarSchema(BaseModel):
     brand: str
     model: str
@@ -13,7 +13,7 @@ class CarSchema(BaseModel):
     description: Optional[str] = None
 
 
-# schema de resposta de dados - response
+# schema de resposta de dados com ID - response
 class CarPublic(CarSchema):
     id: int
     brand: str
